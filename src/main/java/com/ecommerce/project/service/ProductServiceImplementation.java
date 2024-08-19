@@ -110,7 +110,7 @@ public class ProductServiceImplementation implements ProductService {
     List<Product> products = productPage.getContent();
 
     if(products.isEmpty()){
-      throw new APIException("Product List is Empty with Category " + categoryId);
+      throw new APIException("Product List is Empty with " + category.getCategoryName() + " Category");
     }
 
     List<ProductDTO> productDTOS = products.stream()
