@@ -78,20 +78,7 @@ public class ProductServiceImplementation implements ProductService {
       throw new EmptyReturnListException("Product List is Empty");
     }
 
-    List<ProductDTO> productDTOS = products.stream()
-      .map(product -> modelMapper.map(product, ProductDTO.class))
-      .toList();
-
-    ProductResponse productResponse = new ProductResponse();
-
-    productResponse.setContent(productDTOS);
-    productResponse.setPageNumber(productPage.getNumber());
-    productResponse.setPageSize(productPage.getSize());
-    productResponse.setTotalElements(productPage.getTotalElements());
-    productResponse.setTotalPage(productPage.getTotalPages());
-    productResponse.setLastPage(productPage.isLast());
-
-    return productResponse;
+    return fileService.getAllResponse(products, productPage);
   }
 
   @Override
@@ -113,20 +100,7 @@ public class ProductServiceImplementation implements ProductService {
       throw new APIException("Product List is Empty with " + category.getCategoryName() + " Category");
     }
 
-    List<ProductDTO> productDTOS = products.stream()
-      .map(product -> modelMapper.map(product, ProductDTO.class))
-      .toList();
-
-    ProductResponse productResponse = new ProductResponse();
-
-    productResponse.setContent(productDTOS);
-    productResponse.setPageNumber(productPage.getNumber());
-    productResponse.setPageSize(productPage.getSize());
-    productResponse.setTotalElements(productPage.getTotalElements());
-    productResponse.setTotalPage(productPage.getTotalPages());
-    productResponse.setLastPage(productPage.isLast());
-
-    return productResponse;
+    return fileService.getAllResponse(products, productPage);
   }
 
   @Override
@@ -146,19 +120,7 @@ public class ProductServiceImplementation implements ProductService {
       throw new APIException("Product not Found with the keyWord: " + keyword);  //Concat the String
     }
 
-    List<ProductDTO> productDTOS = products.stream()
-      .map(product -> modelMapper.map(product, ProductDTO.class))
-      .toList();
-    ProductResponse productResponse = new ProductResponse();
-
-    productResponse.setContent(productDTOS);
-    productResponse.setPageNumber(productPage.getNumber());
-    productResponse.setPageSize(productPage.getSize());
-    productResponse.setTotalElements(productPage.getTotalElements());
-    productResponse.setTotalPage(productPage.getTotalPages());
-    productResponse.setLastPage(productPage.isLast());
-
-    return productResponse;
+    return fileService.getAllResponse(products, productPage);
   }
 
   @Override
