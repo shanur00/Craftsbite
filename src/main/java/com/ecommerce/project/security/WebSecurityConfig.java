@@ -34,23 +34,14 @@ import java.util.Set;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity
+//@EnableMethodSecurity
 public class WebSecurityConfig {
 
   @Autowired
   UserDetailsServiceImplementation userDetailsServiceImplementation;
 
   @Autowired
-  DataSource dataSource;
-
-  @Autowired
   AuthEntryPointJwt unauthorizedHandler;
-
-  @Autowired
-  RoleRepository roleRepository;
-
-  @Autowired
-  UserRepository userRepository;
 
   @Bean
   public AuthTokenFilter authenticationJwtTokenFilter(){
@@ -120,8 +111,8 @@ public class WebSecurityConfig {
           auth.requestMatchers("/api/auth/**").permitAll()
             .requestMatchers("/v3/api-docs/**").permitAll()
             .requestMatchers("/h2-console/**").permitAll()
-            .requestMatchers("/api/admin/**").permitAll()
-            .requestMatchers("/api/public/**").permitAll()
+            //.requestMatchers("/api/admin/**").permitAll()
+            //.requestMatchers("/api/public/**").permitAll()
             .requestMatchers("/swagger-ui/**").permitAll()
             .requestMatchers("/api/test/**").permitAll()
             .requestMatchers("/images/**").permitAll()
@@ -182,13 +173,14 @@ public class WebSecurityConfig {
     return httpSecurity.build();
   }*/
 
-  @Bean
+ /* @Bean
   public UserDetailsService userDetailsService(){
     return new JdbcUserDetailsManager(dataSource);
   }
+  */
 
   @Bean
-  public CommandLineRunner initData(UserDetailsService userDetailsService){
+  public CommandLineRunner initData(RoleRepository roleRepository, UserRepository userRepository, PasswordEncoder passwordEncoder) {
     return args -> {
       Roles userRole = roleRepository.findByRoleName(AppRole.ROLE_USER)
         .orElseGet(() -> {
@@ -215,17 +207,17 @@ public class WebSecurityConfig {
 
       // Create users if not already present
       if (!userRepository.existsByUserName("user1")) {
-        Users user1 = new Users("user1", "user1@example.com", passwordEncoder().encode("password1"));
+        Users user1 = new Users("user1", "user1@example.com", passwordEncoder.encode("password1"));
         userRepository.save(user1);
       }
 
       if (!userRepository.existsByUserName("seller1")) {
-        Users seller1 = new Users("seller1", "seller1@example.com", passwordEncoder().encode("password2"));
+        Users seller1 = new Users("seller1", "seller1@example.com", passwordEncoder.encode("password2"));
         userRepository.save(seller1);
       }
 
       if (!userRepository.existsByUserName("admin")) {
-        Users admin = new Users("admin", "admin@example.com", passwordEncoder().encode("adminPass"));
+        Users admin = new Users("admin", "admin@example.com", passwordEncoder.encode("adminPass"));
         userRepository.save(admin);
       }
 

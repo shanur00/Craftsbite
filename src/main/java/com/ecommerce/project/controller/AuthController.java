@@ -24,10 +24,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -70,7 +67,7 @@ public class AuthController {
     */
     UserDetailsImplementation userDetails = (UserDetailsImplementation) authentication.getPrincipal();
 
-    String jwtCookie = jwtUtils.generateTokenFromUsername(userDetails);
+    ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
 
     List<String> roles = userDetails.getAuthorities().stream()
       .map(GrantedAuthority::getAuthority)
@@ -79,9 +76,9 @@ public class AuthController {
     /*
         Here We just want to get the details of the user who logs in. So we need to fetch the userId too.
     */
-    UserInfoResponse loginResponse = new UserInfoResponse(userDetails.getId(), userDetails.getUsername(), jwtCookie, roles);
+    UserInfoResponse loginResponse = new UserInfoResponse(userDetails.getId(), userDetails.getUsername(), roles);
 
-    return ResponseEntity.ok(loginResponse);
+    return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString()).body(loginResponse);
   }
 
   @PostMapping("/signup")
@@ -156,5 +153,39 @@ public class AuthController {
     userRepository.save(users);
 
     return ResponseEntity.ok(new MessageResponse("User Registered Successfully!"));
+  }
+
+  @GetMapping("/username")
+  public String currentUserName(Authentication authentication){
+    if(authentication!=null){
+      return authentication.getName();
+    }
+    else{
+      return "";
+    }
+  }
+
+  /*
+      The Authentication Interface is representing the user who is right now authenticated in the system.
+      The object is automatically passed to the method. And Also automatically being made available to get the details
+      from the object.
+   */
+  @GetMapping("/user")
+  public ResponseEntity<?> getUserDetails(Authentication authentication){
+    UserDetailsImplementation userDetails = (UserDetailsImplementation) authentication.getPrincipal();
+    List<String> roles = userDetails.getAuthorities().stream()
+      .map(item->item.getAuthority())
+      .collect(Collectors.toList());
+
+    UserInfoResponse response = new UserInfoResponse(userDetails.getId(), userDetails.getUsername(), roles);
+
+    return ResponseEntity.ok().body(response);
+  }
+
+  @PostMapping("/signout")
+  public ResponseEntity<?> signOutUser(){
+    ResponseCookie cookie = jwtUtils.getCleanJwtCookie();
+
+    return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).body(new MessageResponse("You've been signed Out") );
   }
 }

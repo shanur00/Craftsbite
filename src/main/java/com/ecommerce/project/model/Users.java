@@ -49,10 +49,14 @@ public class Users {
   @Column(name = "password")
   private String password;
 
+  @Column(name = "enabled")
+  private boolean enabled;
+
   public Users(String username, String email, String password) {
     this.userName = username;
     this.email = email;
     this.password = password;
+    this.enabled = true;
   }
 
   /*
@@ -68,7 +72,7 @@ public class Users {
   @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE},
   fetch = FetchType.EAGER)
   @JoinTable(
-    name = "user_role",
+    name = "authorities",
     joinColumns = @JoinColumn(name = "user_id"),
     inverseJoinColumns = @JoinColumn(name = "role_id")
   )
@@ -122,4 +126,9 @@ public class Users {
     inverseJoinColumns = @JoinColumn(name = "address_id")
   )
   private List<Address> addressesInUsers = new ArrayList<>();
+
+  @ToString.Exclude
+  @OneToOne(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE},
+  orphanRemoval = true)
+  private Cart cart;
 }

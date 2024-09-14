@@ -95,19 +95,19 @@ public class JwtUtils {
            The value of a cookie is typically the JWT itself, which might look something like this:
               "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 
-
+   */
   public String getJwtFromCookies(HttpServletRequest request){
     Cookie cookie = WebUtils.getCookie(request, jwtCookie);
-    if(cookie==null){
-      return null;
-    }
-    else{
+    if(cookie!=null){
       System.out.println("Cookie: "+cookie);
       return cookie.getValue();
     }
+    else{
+      return null;
+    }
   }
 
-  public ResponseCookie generateCookie(UserDetailsImplementation userPrinciple){
+  public ResponseCookie generateJwtCookie(UserDetailsImplementation userPrinciple){
     String jwt = generateTokenFromUsername(userPrinciple.getUsername());
 
     /*
@@ -142,12 +142,19 @@ public class JwtUtils {
                     "httpOnly": false
                  }
 
+    */
+
     return ResponseCookie.from(jwtCookie, jwt).path("/api").
       maxAge(24*60*60)
       .httpOnly(false)
       .build();
   }
-  */
+
+  public ResponseCookie getCleanJwtCookie(){
+    return ResponseCookie.from(jwtCookie, null)
+      .path("/api")
+      .build();
+  }
 
   /*
      This method generates a JWT based on the user's username.
@@ -162,12 +169,12 @@ public class JwtUtils {
       Password: password123
       jwtExpirationMs (token expiration time) is set to 1 hour (3600000 milliseconds).
    */
-  public String generateTokenFromUsername(UserDetails userDetails) {
+  public String generateTokenFromUsername(String username) {
     /*
        username will be "johndoe".
 
      */
-    String username = userDetails.getUsername();
+    //String username = userDetails.getUsername();
 
     return Jwts.builder()
       /*
