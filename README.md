@@ -43,39 +43,39 @@ The scope of our project includes the development of a comprehensive platform wi
 ## Users and their role :
 
 ### Customers :
-Browse and search for local handmade businesses.
-Create and manage user accounts.
-Place orders and manage delivery details.
-Leave reviews and ratings for businesses.
-Local Shops/Businesses :
-Create and manage business profiles.
-List food menus and goods list with prices and delivery details.
-Receive and process orders.
-Respond to customer reviews and ratings.
-Offer promotions and discounts.
+- Browse and search for local handmade businesses.
+- Create and manage user accounts.
+- Place orders and manage delivery details.
+- Leave reviews and ratings for businesses.
+- Local Shops/Businesses :
+- Create and manage business profiles.
+- List food menus and goods list with prices and delivery details.
+- Receive and process orders.
+- Respond to customer reviews and ratings.
+ - Offer promotions and discounts.
 Administrators :
-Oversee platform operations.
-Manage user and business accounts.
-Monitor and moderate reviews and ratings.
-Ensure the overall smooth functioning of the platform.
+- Oversee platform operations.
+- Manage user and business accounts.
+- Monitor and moderate reviews and ratings.
+- Ensure the overall smooth functioning of the platform.
 
 ## Use cases of the system :
 User Registration and Login:
-Users can register using email or social media accounts and log in to access their profiles.
-Browsing and Searching for Businesses:
-Users can search for local handmade food businesses by location, food type, or specific keywords.
+- Users can register using email or social media accounts and log in to access their profiles.
+- Browsing and Searching for Businesses:
+- Users can search for local handmade food businesses by location, food type, or specific keywords.
 Viewing Business Profiles:
-Users can view detailed profiles of businesses, including menus, prices, delivery options, reviews, and ratings.
+- Users can view detailed profiles of businesses, including menus, prices, delivery options, reviews, and ratings.
 Placing Orders:
-Users can select items from a business menu, add them to the cart, and place orders with specified delivery details.
+- Users can select items from a business menu, add them to the cart, and place orders with specified delivery details.
 Leaving Reviews and Ratings:
-After receiving an order, users can leave reviews and ratings for the business.
+- After receiving an order, users can leave reviews and ratings for the business.
 Managing Promotions and Discounts:
-Administrators can create and manage promotions and discounts in collaboration with businesses.
+- Administrators can create and manage promotions and discounts in collaboration with businesses.
 AI-Driven Suggestions:
-An AI feature that recommends product options and shops to users based on their location, interests, and previous orders.
+- An AI feature that recommends product options and shops to users based on their location, interests, and previous orders.
 AI Chatbot:
-An AI-powered chatbot that interacts with users, asking questions about food preferences, location, price range, and more to help them find suitable options.
+ - An AI-powered chatbot that interacts with users, asking questions about food preferences, location, price range, and more to help them find suitable options.
 
 
  
@@ -83,8 +83,8 @@ An AI-powered chatbot that interacts with users, asking questions about food pre
  
 ## Developers
  
- Shahnur Milon
- Md Mizbah Uddin Junaed
+- Shahnur Milon
+ - Md Mizbah Uddin Junaed
  
  
 
