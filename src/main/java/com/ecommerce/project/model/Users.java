@@ -117,14 +117,14 @@ public class Users {
   private Set<Product> products;
 
   @Getter
-  @ManyToMany(cascade = {
+  @OneToMany(mappedBy = "users", cascade = {
     CascadeType.PERSIST, CascadeType.MERGE
-  })
-  @JoinTable(
-    name = "user_address",
-    joinColumns = @JoinColumn(name = "user_id"),
-    inverseJoinColumns = @JoinColumn(name = "address_id")
-  )
+  }, orphanRemoval = true)
+//  @JoinTable(
+//    name = "user_address",
+//    joinColumns = @JoinColumn(name = "user_id"),
+//    inverseJoinColumns = @JoinColumn(name = "address_id")
+//  )
   private List<Address> addressesInUsers = new ArrayList<>();
 
   @ToString.Exclude

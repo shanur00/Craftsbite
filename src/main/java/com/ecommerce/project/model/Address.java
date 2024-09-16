@@ -27,7 +27,7 @@ public class Address {
 
   @NotBlank
   @Size(min = 5, message = "Must be At Least 5 characters")
-  public String buildingName;
+  private String buildingName;
 
   @NotBlank
   @Size(min = 5, message = "Must be At Least 5 characters")
@@ -53,8 +53,12 @@ public class Address {
    */
 
   @ToString.Exclude
-  @ManyToMany(mappedBy = "addressesInUsers")
-  private List<Users> usersInAddress = new ArrayList<>();
+  @ManyToOne
+  @JoinColumn(name = "user_id")
+  private Users users;
+
+  @OneToMany(mappedBy = "address", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+  private List<Orders> orders = new ArrayList<>();
 
   public Address(String street, String buildingName, String city, String state, String country, String zipCode) {
     this.street = street;

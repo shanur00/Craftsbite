@@ -143,8 +143,11 @@ public class CartServiceImplementation implements CartService{
               "spacialPrice": 17.99
             }
        */
-      List<ProductDTO> productDTOS = cart.getCartItems().stream().map(cartItem->
-        modelMapper.map(cartItem.getProduct(), ProductDTO.class)).collect(Collectors.toList());
+      List<ProductDTO> productDTOS = cart.getCartItems().stream().map(cartItem->{
+        ProductDTO productDTO = modelMapper.map(cartItem.getProduct(), ProductDTO.class);
+        productDTO.setQuantity(cartItem.getQuantity());
+        return productDTO;
+      }).collect(Collectors.toList());
 
       /*
         After mapping all products, the list of ProductDTO objects is assigned to the CartDTO:
@@ -234,9 +237,7 @@ public class CartServiceImplementation implements CartService{
       throw new ResourceNotFoundException("Product","productID",productId);
     }
 
-    cart.setTotalPrice(cart.getTotalPrice()-cartItem.getProductPrice()*cartItem.getQuantity());
-
-    cartRepository.save(cart);
+    cart.setTotalPrice(cart.getTotalPrice()-(cartItem.getProduct().getSpacialPrice()*cartItem.getQuantity()));
 
     cartItemRepository.deleteCartItemByProductIdAndCartId(cartId, productId);
 
@@ -267,6 +268,15 @@ public class CartServiceImplementation implements CartService{
     Product product = productRepository.findById(productId).orElseThrow(
       ()-> new ResourceNotFoundException("Product", "ProductId", productId)
     );
+
+    if(product.getQuantity()==0){
+      throw new APIException("Product is not available!!");
+    }
+
+    if(product.getQuantity()<quantity){
+      throw new APIException("Please, make an order of the " + product.getProductName()
+        + " less than or equal to the quantity " + product.getQuantity() + ".");
+    }
 
     /*
       We are using carId to fetch cartItem so we do not use cart.setCartItem().
@@ -338,9 +348,57 @@ public class CartServiceImplementation implements CartService{
 
     cartItem.setProductPrice(product.getSpacialPrice());
 
+    /*
+      Once an entity (like Cart) is loaded from the database using findById(), it is managed by JPA within the current session or
+      persistence context.
+
+      Any changes you make to a managed entity (like cart.setTotalPrice()) are automatically detected by JPA and persisted to the
+      database when the transaction commits, even if you don’t explicitly call cartRepository.save(cart).
+     */
     cart.setTotalPrice(cartPrice + (cartItem.getProductPrice()*cartItem.getQuantity()));
 
-    cartRepository.save(cart);
+    /*
+      Even though you're using cartId in the custom query, you're retrieving the CartItem by its relationship with the Product and Cart.
+      You're not directly working with the Cart entity itself in this query, meaning:
+
+        1.The query findCartItemByProductIdAndCartId(cartId, productId) only retrieves the CartItem based on its
+          association with the Cart and Product.
+
+        2.The Cart is not being retrieved or manipulated in this query. It’s just being used as an ID reference to help
+          find the correct CartItem.
+
+        3.Cascading rules work when changes happen to the Cart directly, and they automatically apply to related entities (like CartItem).
+          In your custom query, however, you're only working with CartItem, not Cart.
+
+      If you had retrieved the Cart and then modified its associated CartItems, JPA would apply the cascade rules. But here’s the difference:
+
+      1. Custom Query:
+         CartItem cartItem = cartItemRepository.findCartItemByProductIdAndCartId(cartId, productId);
+
+             What's happening: You are directly fetching the CartItem, not the Cart. The Cart is involved as an ID filter but isn’t
+                 part of the JPA persistence context.
+             Cascading doesn’t apply: JPA won't automatically update the Cart because you didn't fetch or modify the Cart
+                 entity directly. You're only working with CartItem.
+
+
+       2. If You Retrieved the Cart:
+           Cart cart = cartRepository.findById(cartId).orElseThrow(...);
+           CartItem cartItem = cart.getCartItems().stream()
+          .filter(item -> item.getProduct().getProductId().equals(productId))
+          .findFirst().orElseThrow(...);
+
+             What's happening: You first fetch the Cart, and then retrieve the CartItem through the Cart's relationship.
+             Cascading applies: Now, if you modify the CartItem and save the Cart, the changes will cascade and affect
+                 both the Cart and its CartItems.
+
+      Key Difference:
+         In your custom query, the CartItem is fetched in isolation using cartId and productId, which means JPA doesn’t track
+         changes to the Cart itself. Therefore, cascading doesn’t apply.
+
+         If you had retrieved the Cart and then worked with the associated CartItems, JPA’s cascade rules would apply
+         automatically, saving changes to both the Cart and CartItem.
+     */
+    cartItemRepository.save(cartItem);
   }
 
 
