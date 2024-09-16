@@ -15,20 +15,22 @@ Development : Jul 10 - Present
 <!-- ![Gantt Chart](Gantt_chart.png) -->
 
 
-Technologies 
+## Technologies  
 ----------------------------------
-Tools | Description 
-SL |: --------------|:------------| :---------|
-1  | Java  | Basics of Java OOP
-2  | Java Springboot  | For backend and build the project 
-3 | CDI, Spring security | backend
-4  | MySQL | For Database Management System 
-4 | Tensor flow | Implement AI models (Dialogflow, Hybrid Model
-6 | Next.js, Tailwind CSSs | Frontend
-7 | HTML and CSS | Web design
-8 | IntellijIdea |As IDE
-9 | Apache Tomcat | Web Server
-10 | Git | Version Control  
+
+| SL | Tools               | Description                                |
+|----|---------------------|--------------------------------------------|
+| 1  | Java                | Basics of Java OOP                         |
+| 2  | Java Spring Boot     | For backend and project build              |
+| 3  | CDI, Spring Security | Backend tools for security and dependency injection |
+| 4  | MySQL               | Database Management System                 |
+| 5  | TensorFlow          | Implement AI models (Dialogflow, Hybrid Model) |
+| 6  | Next.js, Tailwind CSS | Frontend development                      |
+| 7  | HTML and CSS        | Web design                                 |
+| 8  | IntelliJ IDEA       | Integrated Development Environment (IDE)   |
+| 9  | Apache Tomcat       | Web server                                 |
+| 10 | Git                 | Version control                            |
+
 
 
 ## overview :
