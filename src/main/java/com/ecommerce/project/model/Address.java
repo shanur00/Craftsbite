@@ -45,13 +45,6 @@ public class Address {
   @Size(min = 5, message = "Must be At Least 5 characters")
   private String zipCode;
 
-  /*
-      ToString.Exclude:
-          prevents the usersInAddress field from being included in the generated toString() method and
-          also prevent recursion.
-          This field will not be printed.
-   */
-
   @ToString.Exclude
   @ManyToOne
   @JoinColumn(name = "user_id")

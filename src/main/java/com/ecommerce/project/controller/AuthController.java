@@ -62,9 +62,6 @@ public class AuthController {
 
     SecurityContextHolder.getContext().setAuthentication(authentication);
 
-    /*
-        Using Our Custom UserdetailsImplementation.
-    */
     UserDetailsImplementation userDetails = (UserDetailsImplementation) authentication.getPrincipal();
 
     ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
@@ -73,24 +70,13 @@ public class AuthController {
       .map(GrantedAuthority::getAuthority)
       .collect(Collectors.toList());
 
-    /*
-        Here We just want to get the details of the user who logs in. So we need to fetch the userId too.
-    */
     UserInfoResponse loginResponse = new UserInfoResponse(userDetails.getId(), userDetails.getUsername(), roles);
 
     return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString()).body(loginResponse);
   }
 
   @PostMapping("/signup")
-  /*SignupRequest:
 
-      {
-        "username": "john_doe",
-        "email": "john.doe@example.com",
-        "password": "password123",
-        "role": ["user", "admin"]
-      }
-   */
   public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signupRequest){
     if(userRepository.existsByUserName(signupRequest.getUsername())){
       return ResponseEntity.badRequest().body("Username is already in use");
@@ -103,25 +89,14 @@ public class AuthController {
     Users users = new Users(signupRequest.getUsername(), signupRequest.getEmail(),
       passwordEncoder.encode(signupRequest.getPassword()));
 
-    /*
-      Set<String> stringRole:
-         Extracts the roles from the SignupRequest. This can be roles like "admin", "user", or "seller" (optional field).
-     */
+
     Set<String> stringRole = signupRequest.getRole();
 
-    /*
-      Set<Roles> roles = new HashSet<>():
-         Prepares a new set of Roles objects that will later be assigned to the user.
-     */
+
     Set<Roles> roles = new HashSet<>();
 
     if(stringRole == null){
-      /*
-        The orElseThrow() method is part of the Optional class which in the RoleRepository;
 
-        roleRepository.findByRoleName(AppRole.ROLE_USER):
-            This method checks the roles table in the database for a record with the name ROLE_USER.
-       */
       Roles role = roleRepository.findByRoleName(AppRole.ROLE_USER).
         orElseThrow(()-> new RuntimeException("Error: Role Not Found!"));
 
@@ -165,11 +140,6 @@ public class AuthController {
     }
   }
 
-  /*
-      The Authentication Interface is representing the user who is right now authenticated in the system.
-      The object is automatically passed to the method. And Also automatically being made available to get the details
-      from the object.
-   */
   @GetMapping("/user")
   public ResponseEntity<?> getUserDetails(Authentication authentication){
     UserDetailsImplementation userDetails = (UserDetailsImplementation) authentication.getPrincipal();

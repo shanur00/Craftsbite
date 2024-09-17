@@ -16,10 +16,6 @@ public class UserDetailsServiceImplementation implements UserDetailsService {
   UserRepository userRepository;
 
   @Override
-  /*
-    It ensures that a method runs within a database transaction. If anything goes wrong (like an exception),
-    it rolls back the transaction, so the database remains consistent.
-   */
   @Transactional
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     Users users = userRepository.findByUserName(username)

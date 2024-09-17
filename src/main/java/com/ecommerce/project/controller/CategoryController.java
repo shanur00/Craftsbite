@@ -20,14 +20,8 @@ public class CategoryController {
     this.categoryService = categoryService;
   }
 
- /* @GetMapping("/echo")
-  public ResponseEntity<String> echoMessage(@RequestParam(name = "message", defaultValue = "Hello World") String message){
-    return new ResponseEntity<>("Echoed message: "+message, HttpStatus.OK);
-  }*/
 
   @GetMapping("/public/categories")
-  /* @RequestParam query parameters (যেমন, api/echo?message="John") এর জন্য ব্যবহৃত হয়। */
-  //@RequestMapping(value = "/api/public/categories", method = RequestMethod.GET)
   public ResponseEntity<CategoryResponse> getAllCategory(@RequestParam(name = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
                                                          @RequestParam(name = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
                                                          @RequestParam(name = "sortBy", defaultValue = AppConstants.SORT_CATEGORY_BY) String sortBy,
@@ -42,27 +36,14 @@ public class CategoryController {
   }
 
   @DeleteMapping("/admin/categories/{categoryId}")
-  /* @PathVariable URI-র path-এর মধ্যে থাকা মান (যেমন, /{categoryId}) এর জন্য ব্যবহৃত হয়। */
-  public ResponseEntity<CategoryDTO> deleteCategory(@PathVariable Long categoryId){
+  public ResponseEntity<CategoryDTO> deleteCategory(@PathVariable Long categoryId) {
     CategoryDTO categoryDTO = categoryService.deleteCategory(categoryId);
     return new ResponseEntity<>(categoryDTO, HttpStatus.OK);
-//    try {
-//      String status = categoryService.deleteCategory(categoryId);
-//      return new ResponseEntity<>(status, HttpStatus.OK);
-//    } catch (ResponseStatusException responseStatusException){
-//      return new ResponseEntity<>(responseStatusException.getReason(), responseStatusException.getStatusCode());
-//    }
   }
 
   @PutMapping("/admin/categories/{categoriesId}")
   public ResponseEntity<CategoryDTO> updateCategory(@Valid @RequestBody CategoryDTO categoryDTO, @PathVariable Long categoriesId){
     CategoryDTO savedCategoryDTO = categoryService.updateCategory(categoryDTO, categoriesId);
     return new ResponseEntity<>(savedCategoryDTO, HttpStatus.OK);
-    /*try {
-      Category savedCategory = categoryService.updateCategory(category, categoriesId);
-      return new ResponseEntity<>("Category with id: "+categoriesId, HttpStatus.OK);
-    } catch (ResponseStatusException responseStatusException){
-      return new ResponseEntity<>(responseStatusException.getReason(), responseStatusException.getStatusCode());
-    }*/
   }
 }

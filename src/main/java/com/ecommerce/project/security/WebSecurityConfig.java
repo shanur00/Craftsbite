@@ -47,62 +47,22 @@ public class WebSecurityConfig {
   public AuthTokenFilter authenticationJwtTokenFilter(){
     return new AuthTokenFilter();
   }
-
-  /*
-      DaoAuthenticationProvider is a built-in class in Spring Security that is used to authenticate users by retrieving user
-      information from a database or any other persistent storage via a UserDetailsService.
-
-      It delegates the retrieval of user details (like username, password, and roles) to a UserDetailsService implementation
-      and handles password matching using a PasswordEncoder.
-
-      This class is essential when you are working with authentication that relies on persistent user data, such as in
-      database-backed user authentication.
-   */
   @Bean
   public DaoAuthenticationProvider authenticationProvider(){
     DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
 
-    /*
-      The UserDetailsService is an interface in Spring Security used to fetch user details from a persistent store
-      (like a database). The method setUserDetailsService assigns an implementation of UserDetailsService that will be
-      used by DaoAuthenticationProvider to load the user's information.
-     */
     authenticationProvider.setUserDetailsService(userDetailsServiceImplementation);
 
-    /*
-      The `PasswordEncoder` is used to encode (hash) the password when the user registers, and it is also used to match the
-      encoded password when the user tries to log in. Spring Security uses this encoder to ensure passwords are stored
-      securely in hashed form.
-
-      In your method, the `passwordEncoder()` is likely a separate method that returns an instance of a `PasswordEncoder`,
-      such as `BCryptPasswordEncoder`.
-     */
     authenticationProvider.setPasswordEncoder(passwordEncoder());
 
     return authenticationProvider;
   }
 
 
-  /*
-      HttpSecurity is a class in Spring Security that allows you to configure the security for HTTP requests in a web
-      application. It provides a set of methods to customize how your application handles security concerns like authentication,
-      authorization, CSRF protection, session management, and more.
-
-      SecurityFilterChain uses the HttpSecurity class to define how HTTP requests are handled, including authentication and authorization rules, filter chains, session
-      management, and CSRF protection.
-   */
   @Bean
   public SecurityFilterChain filterChain (HttpSecurity http) throws Exception{
     http.csrf(AbstractHttpConfigurer::disable)
-      /*
-        AuthenticationEntryPoint is the Interface and you implement it in AuthEntryPointJWT. Now To handle exception the
-        authenticationEntryPoint will be called and an instance of the AuthenticationEntryPoint should be passed.
 
-          public ExceptionHandlingConfigurer<H> authenticationEntryPoint(AuthenticationEntryPoint authenticationEntryPoint) {
-              this.authenticationEntryPoint = authenticationEntryPoint;
-              return this;
-        	}
-       */
       .exceptionHandling(exception-> exception.authenticationEntryPoint(
         unauthorizedHandler))
       .sessionManagement(session -> session.sessionCreationPolicy(
@@ -119,10 +79,6 @@ public class WebSecurityConfig {
             .anyRequest().authenticated()
         );
 
-    /*
-      This ensures that the authentication process uses your custom authenticationProvider, which could retrieve user details
-      from a database and match them against provided credentials using a password encoder (like BCrypt).
-     */
     http.authenticationProvider(authenticationProvider());
 
     http.addFilterBefore(authenticationJwtTokenFilter(),
@@ -147,37 +103,6 @@ public class WebSecurityConfig {
     ));
   }
 
-  /*@Bean
-  SecurityFilterChain defaultSecurityFilterChain(HttpSecurity httpSecurity) throws Exception{
-    httpSecurity.authorizeHttpRequests((request)->
-      request.requestMatchers("/h2-console/**", "/api/signin").permitAll()
-        .anyRequest().authenticated()
-    );
-
-    httpSecurity.sessionManagement(session->
-      session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-    );
-
-    httpSecurity.exceptionHandling(exception-> exception.authenticationEntryPoint(unauthorizedHandler));
-
-    httpSecurity.httpBasic(Customizer.withDefaults());
-
-    httpSecurity.headers(headers->
-      headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)
-    );
-
-    httpSecurity.csrf(AbstractHttpConfigurer::disable);
-
-    httpSecurity.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-
-    return httpSecurity.build();
-  }*/
-
- /* @Bean
-  public UserDetailsService userDetailsService(){
-    return new JdbcUserDetailsManager(dataSource);
-  }
-  */
 
   @Bean
   public CommandLineRunner initData(RoleRepository roleRepository, UserRepository userRepository, PasswordEncoder passwordEncoder) {
@@ -244,11 +169,6 @@ public class WebSecurityConfig {
     return new BCryptPasswordEncoder();
   }
 
-  /*
-     Spring automatically sets up the AuthenticationManager based on the security configuration
-     (SecurityFilterChain) you provide (which includes the
-     UserDetailsService, password encoder, and any custom authentication logic).
-   */
   @Bean
   AuthenticationManager authenticationManager(AuthenticationConfiguration builder) throws Exception{
     return builder.getAuthenticationManager();
