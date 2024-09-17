@@ -3,9 +3,9 @@
 
 ## Type : Web application
 
-## Peoject Timeline  
+## Project Timeline  
 -----------------
-## overview :
+## Overview :
 
 Craftsbite is a web platform connecting local homemade businesses, like food and craft makers, with nearby customers. It caters to the growing demand for homemade products and helps small home-based entrepreneurs expand their reach beyond social media. Unlike traditional delivery services focused on restaurants, Craftsbite centralizes local handmade food and craft businesses, benefiting both customers and entrepreneurs. With user-friendly features and modern web technologies, Craftsbite aims to revolutionize how homemade goods are sold, supporting the growth of local businesses and making it easier for customers to discover and enjoy unique, handmade products.
 
@@ -20,19 +20,19 @@ Craftsbite is a web platform connecting local homemade businesses, like food and
 <!-- ![Gantt Chart](Gantt_chart.png) -->
 
 
-## Tools and Technologies  
+## Used Tools and Technologies  
 ----------------------------------
 
 | SL | Technologies               | Description                                |
 |----|---------------------|--------------------------------------------|
-| 1  | Java             | Basics of Java OOP                         |
-| 2  | Java Spring Boot     | For backend and project build              |
+| 1  | Java             | Basics of Java and OOP                         |
+| 2  | Java Spring Boot     | For backend framework and project build tools           |
 | 3  | CDI, Spring Security | Backend tools for security and dependency injection |
 | 4  | MongoDB             | Database Management System                 |
-| 5  | TensorFlow          | Implement AI models (Dialogflow, Hybrid Model) |
+| 5  | TensorFlow          | Implement AI models |
 | 6  | Next.js, Tailwind CSS | Frontend development                      |
 | 7  | HTML and CSS       | Web design                                 |
-| 8  | IntelliJ IDEA       | As (IDE)   |
+| 8  | IntelliJ IDEA       | As IDE   |
 | 9  | Apache Tomcat      | Web server                              |
 | 10 | Git        | Version control                          |
 
@@ -83,7 +83,7 @@ The scope of our project includes the development of a comprehensive platform wi
   
  
 ## Developers
- 
+----------------------------------
 - Shahnur Milon
 - Mizbah Uddin Junaed
  
